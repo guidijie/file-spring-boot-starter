@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.jie.file.storage.LocalAutoConfigure,\
+com.jie.file.storage.MinioAutoConfigure,\
+com.jie.file.storage.AliOssAutoConfigure
