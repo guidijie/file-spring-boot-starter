@@ -3,6 +3,9 @@ package com.jie.file.strategy;
 import com.jie.file.entity.File;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -77,4 +80,19 @@ public interface FileStrategy {
      * @throws Exception 异常
      */
     String getFileUrl(String fileName) throws Exception;
+
+
+    /**
+     * 获取文件流
+     * @param fileName 文件名称
+     * @return 文件流
+     */
+    InputStream getFileInputStream(String fileName);
+
+    /**
+     * 判断文件是否存在
+     * @param fileName 文件名称
+     * @return 文件是否存在
+     */
+    boolean fileExists(String fileName);
 }

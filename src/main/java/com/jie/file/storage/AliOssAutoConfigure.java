@@ -2,14 +2,17 @@ package com.jie.file.storage;
 
 import com.jie.file.entity.File;
 import com.jie.file.properties.FileServerProperties;
+import com.jie.file.strategy.FileStrategy;
 import com.jie.file.strategy.impl.AbstractFileStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -23,10 +26,10 @@ import java.util.List;
 public class AliOssAutoConfigure {
 
 
-//    @Bean
-//    public FileStrategy getFileStrategy() {
-//        return new LocalAutoConfigure.LocalServiceImpl();
-//    }
+    @Bean
+    public FileStrategy getFileStrategy() {
+        return new AliOssAutoConfigure.AliOssServiceImpl();
+    }
 
     /**
      * 阿里云上传服务
@@ -37,6 +40,16 @@ public class AliOssAutoConfigure {
         @Override
         public String getFileUrl(String fileName) throws Exception {
             return null;
+        }
+
+        @Override
+        public InputStream getFileInputStream(String storagePath) {
+            return null;
+        }
+
+        @Override
+        public boolean fileExists(String fileName) {
+            return false;
         }
 
         @Override

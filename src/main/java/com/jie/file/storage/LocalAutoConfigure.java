@@ -17,7 +17,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -71,13 +74,13 @@ public class LocalAutoConfigure {
             String relativePath = Paths.get(LocalDate.now().format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT))).toString();
 
             //上传文件存储的绝对目录 例如：D:\\uploadFiles\\oss-file-service\\2020\\05
-            String absolutePath = Paths.get(endpoint, bucketName, relativePath).toString();
+            relativePath = Paths.get(endpoint, bucketName, relativePath).toString();
             if (file.getDir() != null && !"".equals(file.getDir())) {
-                absolutePath = Paths.get(endpoint, bucketName, file.getDir(), relativePath).toString();
+                relativePath = Paths.get(endpoint, bucketName, file.getDir(), relativePath).toString();
             }
 
             //目标输出文件D:\\uploadFiles\\oss-file-service\\2020\\05\\xxx.doc
-            java.io.File outFile = new java.io.File(Paths.get(absolutePath, fileName).toString());
+            java.io.File outFile = new java.io.File(Paths.get(relativePath, fileName).toString());
 
             //向目标文件写入数据
             FileUtils.writeByteArrayToFile(outFile, multipartFile.getBytes());
@@ -205,7 +208,39 @@ public class LocalAutoConfigure {
             if (fileName != null && !fileName.contains(FILE_SPLIT)) {
                 throw new Exception("上传文件名称缺少后缀");
             }
-            return Paths.get(properties.getUriPrefix(), fileName).toString();
+            return properties.getUriPrefix() +  fileName;
+        }
+
+        /**
+         * 获取文件流
+         * @param fileName 文件名称
+         * @return 文件流
+         */
+        @Override
+        public InputStream getFileInputStream(String fileName) {
+            try {
+                return new FileInputStream(Paths.get(properties.getEndpoint(), fileName).toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("读取文件流失败！");
+            }
+            return null;
+        }
+
+        /**
+         * 判断文件是否存在
+         * @param fileName 文件名称
+         * @return 是否存在
+         */
+        @Override
+        public boolean fileExists(String fileName) {
+            try {
+                return Paths.get(properties.getEndpoint(), fileName).toFile().exists();
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("获取文件失败！");
+                return false;
+            }
         }
     }
 }

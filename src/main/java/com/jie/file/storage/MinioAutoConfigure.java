@@ -7,6 +7,7 @@ import com.jie.file.strategy.impl.AbstractFileStrategy;
 import com.jie.file.utils.DateUtils;
 import com.jie.file.utils.StrPool;
 import io.minio.*;
+import io.minio.errors.*;
 import io.minio.http.Method;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
@@ -25,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -215,6 +218,38 @@ public class MinioAutoConfigure {
                 e.printStackTrace();
             }
             return "";
+        }
+
+        /**
+         * 获取文件流
+         * @param fileName 文件名称
+         * @return 文件流
+         */
+        @Override
+        public InputStream getFileInputStream(String fileName) {
+            try {
+                return minioClient.getObject(GetObjectArgs.builder().bucket(properties.getBucketName()).object(fileName).build());
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("读取文件流失败！");
+            }
+            return null;
+        }
+
+        /**
+         * 判断文件是否存在
+         * @param fileName 文件名称
+         * @return 是否存在
+         */
+        @Override
+        public boolean fileExists(String fileName) {
+            try {
+                this.minioClient.statObject(StatObjectArgs.builder().bucket(properties.getBucketName()).object(fileName).build());
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
 
