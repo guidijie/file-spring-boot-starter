@@ -82,8 +82,8 @@ public class FileServerProperties {
         private String bucketName;
 
         public String getUriPrefix() {
-            if (!uriPrefix.endsWith(StrPool.SLASH)) {
-                uriPrefix += StrPool.SLASH;
+            if (!uriPrefix.endsWith(StrPool.BACK_SLASH)) {
+                uriPrefix += StrPool.BACK_SLASH;
             }
             return uriPrefix;
         }

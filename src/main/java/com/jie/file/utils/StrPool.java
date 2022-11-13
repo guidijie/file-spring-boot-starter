@@ -11,6 +11,7 @@ public interface StrPool {
     String ASTERISK = "*";
     String STAR = "*";
     String BACK_SLASH = "\\";
+    String BACK_SLASH_DOUBLE = "\\\\";
     String COLON = ":";
     String COMMA = ",";
     String DASH = "-";

@@ -64,7 +64,6 @@ public class LocalAutoConfigure {
         public void uploadFile(File file, MultipartFile multipartFile) throws IOException {
             String endpoint = properties.getEndpoint();
             String bucketName = properties.getBucketName();
-            String uriPrefix = properties.getUriPrefix();
 
             //使用UUID为文件生成新文件名
             String fileName = UUID.randomUUID().toString() + StrPool.DOT + file.getExt();
@@ -74,13 +73,13 @@ public class LocalAutoConfigure {
             String relativePath = Paths.get(LocalDate.now().format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT))).toString();
 
             //上传文件存储的绝对目录 例如：D:\\uploadFiles\\oss-file-service\\2020\\05
-            relativePath = Paths.get(endpoint, bucketName, relativePath).toString();
-            if (file.getDir() != null && !"".equals(file.getDir())) {
-                relativePath = Paths.get(endpoint, bucketName, file.getDir(), relativePath).toString();
+            if (file.getDir() != null && !StrPool.EMPTY.equals(file.getDir())) {
+                relativePath = Paths.get(file.getDir(), relativePath).toString();
             }
+            relativePath = Paths.get(bucketName, relativePath, fileName).toString();
 
             //目标输出文件D:\\uploadFiles\\oss-file-service\\2020\\05\\xxx.doc
-            java.io.File outFile = new java.io.File(Paths.get(relativePath, fileName).toString());
+            java.io.File outFile = new java.io.File(Paths.get(endpoint, relativePath).toString());
 
             //向目标文件写入数据
             FileUtils.writeByteArrayToFile(outFile, multipartFile.getBytes());
@@ -94,8 +93,8 @@ public class LocalAutoConfigure {
                     StrPool.SLASH +
                     fileName;
             //替换掉windows环境的\路径
-            url = url.replace("\\\\", StrPool.SLASH);
-            url = url.replace("\\", StrPool.SLASH);
+            url = url.replace(StrPool.BACK_SLASH_DOUBLE, StrPool.SLASH);
+            url = url.replace(StrPool.BACK_SLASH, StrPool.SLASH);
             file.setFileName(fileName);
             file.setRelativePath(relativePath);
         }

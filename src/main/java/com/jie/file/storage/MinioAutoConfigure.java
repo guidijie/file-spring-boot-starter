@@ -81,9 +81,9 @@ public class MinioAutoConfigure {
             //日期目录
             String relativePath = Paths.get(LocalDate.now().format(DateTimeFormatter.ofPattern(DateUtils.DEFAULT_DATE_FORMAT))).toString();
             // 最终路径
-            relativePath = Paths.get(relativePath, fileName).toString().replaceAll("\\\\", "/");
+            relativePath = Paths.get(relativePath, fileName).toString().replaceAll(StrPool.BACK_SLASH_DOUBLE, StrPool.SLASH);
             if (file.getDir() != null && !"".equals(file.getDir())) {
-                relativePath = Paths.get(file.getDir(), bucketName, relativePath).toString().replaceAll("\\\\", "/");
+                relativePath = Paths.get(file.getDir(), relativePath).toString().replaceAll(StrPool.BACK_SLASH_DOUBLE, StrPool.SLASH);
             }
 
             file.setFileName(fileName);
