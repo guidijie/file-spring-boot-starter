@@ -18,15 +18,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!--minio-->
@@ -34,6 +37,7 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>8.0.3</version>
+            <scope>provided</scope>
         </dependency>
 
 
